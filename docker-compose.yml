@@ -1,0 +1,31 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: whaticket
+      POSTGRES_PASSWORD: whaticket@123
+      POSTGRES_DB: whaticket
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8085:80"
+    depends_on:
+      - postgres
+
+  redis:
+    image: redis:latest
+    container_name: meu-redis
+    command: redis-server --requirepass 123456
+    ports:
+      - "6379:6379"
