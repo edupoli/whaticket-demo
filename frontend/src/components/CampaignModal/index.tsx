@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-
 import * as Yup from "yup";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, FieldProps } from "formik";
 import { toast } from "react-toastify";
 import { head } from "lodash";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { green } from "@material-ui/core/colors";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
@@ -36,7 +35,8 @@ import {
 import { AuthContext } from "../../context/Auth/AuthContext";
 import ConfirmationModal from "../ConfirmationModal";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
   root: {
     display: "flex",
     flexWrap: "wrap",
@@ -74,7 +74,17 @@ const CampaignSchema = Yup.object().shape({
     .required("Required"),
 });
 
-const CampaignModal = ({
+interface CampaignModalProps {
+  open: boolean;
+  onClose: () => void;
+  campaignId: string;
+  initialValues: any; 
+  onSave: (data: any) => void; 
+  resetPagination: () => void;
+}
+
+
+const CampaignModal: React.FC<CampaignModalProps> = ({
   open,
   onClose,
   campaignId,
@@ -86,6 +96,7 @@ const CampaignModal = ({
   const isMounted = useRef(true);
   const { user } = useContext(AuthContext);
   const { companyId } = user;
+
 
   const initialState = {
     name: "",
@@ -105,11 +116,12 @@ const CampaignModal = ({
     whatsappId: "",
     contactListId: "",
     companyId,
+    mediaPath: undefined,
   };
 
   const [campaign, setCampaign] = useState(initialState);
-  const [whatsapps, setWhatsapps] = useState([]);
-  const [contactLists, setContactLists] = useState([]);
+  const [whatsapps, setWhatsapps] = useState<any[]>([]); 
+  const [contactLists, setContactLists] = useState<any[]>([]); 
   const [messageTab, setMessageTab] = useState(0);
   const [attachment, setAttachment] = useState(null);
   const [confirmationOpen, setConfirmationOpen] = useState(false);
@@ -142,7 +154,7 @@ const CampaignModal = ({
 
       api.get(`/campaigns/${campaignId}`).then(({ data }) => {
         setCampaign((prev) => {
-          let prevCampaignData = Object.assign({}, prev);
+          let prevCampaignData:any = Object.assign({}, prev);
 
           Object.entries(data).forEach(([key, value]) => {
             if (key === "scheduledAt" && value !== "" && value !== null) {

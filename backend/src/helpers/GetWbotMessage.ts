@@ -1,4 +1,4 @@
-import { proto, WASocket } from "@adiwajshing/baileys";
+import { proto, WASocket } from "@whiskeysockets/baileys";
 import Ticket from "../models/Ticket";
 import GetTicketWbot from "./GetTicketWbot";
 import AppError from "../errors/AppError";
@@ -22,9 +22,8 @@ export const GetWbotMessage = async (
       });
 
       return msgFound;
-    
 
-    return null;
+
   };
 
   try {

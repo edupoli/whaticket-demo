@@ -5,7 +5,7 @@ services:
     container_name: postgres
     environment:
       POSTGRES_USER: whaticket
-      POSTGRES_PASSWORD: whaticket@123
+      POSTGRES_PASSWORD: whaticket
       POSTGRES_DB: whaticket
     ports:
       - "5432:5432"
